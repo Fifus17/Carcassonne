@@ -18,14 +18,14 @@ public abstract class AbstractTile {
     public AbstractTile(String id, Infrastructure[] scheme, int version) throws FileNotFoundException {
         this.id = id;
         this.scheme = scheme;
-        this.graphic = new Image(new FileInputStream("src/main/resources/Tile"+id+Integer.toString(version)+".png"));
+        this.graphic = new Image(new FileInputStream("src/main/resources/Tiles/Tile"+id+Integer.toString(version)+".png"));
         this.graphicView = new ImageView(this.graphic);
     }
 
     public AbstractTile(String id, Infrastructure[] scheme) throws FileNotFoundException {
         this.id = id;
         this.scheme = scheme;
-        this.graphic = new Image(new FileInputStream("src/main/resources/Tile"+id+".png"));
+        this.graphic = new Image(new FileInputStream("src/main/resources/Tiles/Tile"+id+".png"));
         this.graphicView = new ImageView(this.graphic);
     }
 
