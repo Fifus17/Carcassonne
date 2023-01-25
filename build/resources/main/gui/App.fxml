@@ -8,7 +8,7 @@
 
 <AnchorPane prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.App">
    <children>
-      <GridPane fx:id="mapGridPane" gridLinesVisible="true" layoutX="47.0" layoutY="47.0" maxHeight="64.0" maxWidth="64.0" minHeight="64.0" minWidth="64.0" prefHeight="64.0" prefWidth="64.0">
+      <GridPane gridLinesVisible="true" layoutX="47.0" layoutY="47.0" maxHeight="64.0" maxWidth="64.0" minHeight="64.0" minWidth="64.0" prefHeight="64.0" prefWidth="64.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="64.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="64.0" />

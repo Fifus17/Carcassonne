@@ -2,6 +2,8 @@ package gui;
 
 import Classes.AbstractTile;
 import Classes.Map;
+import Classes.Vector2D;
+import Enums.Infrastructure;
 import Tiles.*;
 import javafx.application.Application;
 import javafx.event.EventTarget;
@@ -12,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -25,15 +28,10 @@ import java.util.ResourceBundle;
 
 public class App extends Application {
 
-//    @FXML
-//    private GridPane mapGridPane;
-//
-//    @FXML
-//    private Hyperlink button;
-
-    private AbstractTile currentTile = new TileG();
+    private AbstractTile currentTile;
     private GridPane mapGridPane = new GridPane();
     private Hyperlink[][] hyperlinks = new Hyperlink[31][31];
+    private boolean[][] ifPlaced = new boolean[31][31];
 
     DraggableMaker draggableMaker = new DraggableMaker();
 
@@ -45,10 +43,12 @@ public class App extends Application {
         mapGridPane.add(stackPane, i, j);
     }
 
+    public void nothing() {}
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-//        mapGridPane.setGridLinesVisible(true);
+        Map map = new Map();
+        this.currentTile = map.getRandomTile();
 
         for (int i=0; i<31; i++) {
             mapGridPane.getColumnConstraints().add(new ColumnConstraints(100));
@@ -57,46 +57,55 @@ public class App extends Application {
 
         for (int i=0; i<31; i++) {
             for (int j=0; j<31; j++) {
+//                ifPlaced[i][j] = false;
                 hyperlinks[i][j] = new Hyperlink();
                 hyperlinks[i][j].setMinSize(100, 100);
                 hyperlinks[i][j].setMaxSize(100, 100);
                 int finalI = i;
                 int finalJ = j;
-                hyperlinks[i][j].setOnMouseClicked(mouseEvent -> {
-                    add(currentTile.getImageView(), finalI, finalJ);
-                    try {
-                        this.currentTile = new TileG();
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
+                hyperlinks[i][j].setOnMouseEntered(mouseEvent -> {
+                    if (!ifPlaced[finalI][finalJ]) {
+                        StackPane stackPane = new StackPane(currentTile.getImageView(), hyperlinks[finalI][finalJ]);
+                        hyperlinks[finalI][finalJ].setOnMouseClicked(mouseEvent3 -> {
+                            if (map.canBePlaced(currentTile, finalI, finalJ)) {
+                                mapGridPane.add(new StackPane(currentTile.getImageView()), finalI, finalJ);
+                                map.placeTile(currentTile, new Vector2D(finalI, finalJ));
+                                map.checkForPoints(finalI, finalJ);
+                                this.currentTile = map.getRandomTile();
+                                ifPlaced[finalI][finalJ] = true;
+                            }
+                            else {
+                                System.out.println(finalI);
+                                System.out.println(finalJ);
+                                System.out.println(map.canBePlaced(currentTile, finalI, finalJ));
+                                System.out.println(currentTile);
+                            }
+                        });
+                        hyperlinks[finalI][finalJ].setOnMouseExited(mouseEvent2 -> {
+                            mapGridPane.add(new StackPane(hyperlinks[finalI][finalJ]), finalI, finalJ);
+                        });
+                        mapGridPane.add(stackPane, finalI, finalJ);
                     }
                 });
                 mapGridPane.add(new StackPane(hyperlinks[i][j]), i, j);
+
             }
         }
+        mapGridPane.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) currentTile.turnRight();
+            else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) currentTile.turnLeft();
+
+        });
+
+        mapGridPane.add(new StackPane(new TileD(1).getImageView()), 15, 15);
+        map.placeTile(new TileD(1), new Vector2D(15, 15));
 
         draggableMaker.makeDraggable(mapGridPane);
         VBox box = new VBox();
 
-//        Parent root = FXMLLoader.load(getClass().getResource("App.fxml"));
-        Map map = new Map();
-        map.setMapGrid(0, 0, new TileC());
-        map.setMapGrid(0, 1, new TileD(1));
-        map.setMapGrid(1, 0, new TileF());
-        this.currentTile = new TileV(1);
-        Game game = new Game(map);
-
+        mapGridPane.setLayoutX(-1000);
+        mapGridPane.setLayoutY(-1000);
         primaryStage.setScene(new Scene(mapGridPane));
         primaryStage.show();
     }
-
-//    @Override
-//    public void initialize(URL location, ResourceBundle resources) {
-//        draggableMaker.makeDraggable(mapGridPane);
-//        button.setOnMouseClicked(mouseEvent -> {
-////            button.idProperty().set("");
-//            Hyperlink button = new Hyperlink();
-//            mapGridPane.add(button, 1, 1);
-//            add(currentTile.getImageView(), 0, 0);
-//        });
-//    }
 }
