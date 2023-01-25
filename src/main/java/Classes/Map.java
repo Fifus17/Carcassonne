@@ -236,27 +236,33 @@ public class Map {
                 }
             }
             if (a!=100) {
+                int c = 3*j+(a/3);
+                System.out.println(3*i+a%3 + " " + c + " znaleziona pierwsza droga");
                 int points = 1;
                 int ends = 0;
                 int tmp = checkNextRoadNode(3*i+a%3, 3*j+(a/3)-1, Direction.BOT, 0);
                 if(tmp > 0) {
                     points += tmp;
                     ends += 1;
+                    System.out.println("Road completed");
                 }
                 tmp = checkNextRoadNode(3*i+a%3-1, 3*j+(a/3), Direction.RIGHT, 0);
                 if(tmp > 0) {
                     points += tmp;
                     ends += 1;
+                    System.out.println("Road completed");
                 }
                 tmp = checkNextRoadNode(3*i+a%3+1, 3*j+(a/3), Direction.LEFT, 0);
                 if (tmp > 0) {
                     points += tmp;
                     ends += 1;
+                    System.out.println("Road completed");
                 }
                 tmp = checkNextRoadNode(3*i+a%3, 3*j+(a/3)+1, Direction.TOP, 0);
                 if (tmp > 0) {
                     points += tmp;
                     ends += 1;
+                    System.out.println("Road completed");
                 }
                 if (ends == 2) {
                     return points/3 + points%3;
@@ -268,24 +274,20 @@ public class Map {
     }
 
     private int checkNextRoadNode(int i, int j, Direction direction, int points) { // i and j in mapInfrastructureGrid
+        System.out.println(i + " " + j + " " + direction + " " + points);
         if(direction!=Direction.LEFT && mapInfrastructureGrid[i-1][j] != null) {
                 switch (mapInfrastructureGrid[i - 1][j]) {
-                    case R:
-                        checkNextRoadNode(i - 1, j, Direction.RIGHT, points + 1);
-                        break;
-                    case V:
-                        return points;
-                    case G:
-                        return points;
-                    case M:
-                        return points;
+                    case R: return checkNextRoadNode(i - 1, j, Direction.RIGHT, points + 1);
+                    case V: return points;
+                    case G: return points;
+                    case M: return points;
                     default:
                         break;
                 }
             }
         if(direction!= Direction.TOP && mapInfrastructureGrid[i][j-1] != null) {
             switch (mapInfrastructureGrid[i][j-1]) {
-                case R: checkNextRoadNode(i, j-1, Direction.BOT, points+1); break;
+                case R: return checkNextRoadNode(i, j-1, Direction.BOT, points+1);
                 case V: return points;
                 case G: return points;
                 case M: return points;
@@ -294,7 +296,7 @@ public class Map {
         }
         if(direction!= Direction.RIGHT && mapInfrastructureGrid[i+1][j] != null) {
             switch (mapInfrastructureGrid[i+1][j]) {
-                case R: checkNextRoadNode(i+1, j, Direction.LEFT, points+1); break;
+                case R: return checkNextRoadNode(i+1, j, Direction.LEFT, points+1);
                 case V: return points;
                 case G: return points;
                 case M: return points;
@@ -303,7 +305,7 @@ public class Map {
         }
         if(direction!= Direction.BOT && mapInfrastructureGrid[i][j+1] != null) {
             switch (mapInfrastructureGrid[i][j+1]) {
-                case R: checkNextRoadNode(i, j+1, Direction.TOP, points+1); break;
+                case R: return checkNextRoadNode(i, j+1, Direction.TOP, points+1);
                 case V: return points;
                 case G: return points;
                 case M: return points;
