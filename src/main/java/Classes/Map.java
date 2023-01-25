@@ -3,14 +3,19 @@ package Classes;
 import Tiles.TileD;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Vector;
 
 public class Map {
-    private AbstractTile[] tileSet;
+    private ArrayList<AbstractTile> tileSet;
     private AbstractTile[][] mapGrid;
+    private Vector2D size = new Vector2D(1, 1);
 
-    public Map(int size) throws FileNotFoundException {
-        this.mapGrid = new AbstractTile[size][size];
-        this.mapGrid[size+1/2][size+1/2] = new TileD(1);
+    public Map(Vector2D size) throws FileNotFoundException {
+        this.size = size;
+        this.mapGrid = new AbstractTile[size.x][size.y];
+        this.mapGrid[size.x+1/2][size.y+1/2] = new TileD(1);
     }
 
     public Map() throws FileNotFoundException {
@@ -47,5 +52,18 @@ public class Map {
                 else System.out.print(this.mapGrid[i][j].toString());
             }
         }
+    }
+
+    public Vector2D getSize() { return this.size; }
+
+    public AbstractTile getRandomTile() {
+        int rnd = new Random().nextInt(tileSet.size());
+        AbstractTile tile = tileSet.get(rnd);
+        tileSet.remove(rnd);
+        return tile;
+    }
+
+    public void placeTile(AbstractTile tile, Vector2D position) {
+        this.mapGrid[position.x][position.y] = tile;
     }
 }

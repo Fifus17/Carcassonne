@@ -20,6 +20,8 @@ public abstract class AbstractTile {
         this.scheme = scheme;
         this.graphic = new Image(new FileInputStream("src/main/resources/Tiles/Tile"+id+Integer.toString(version)+".png"));
         this.graphicView = new ImageView(this.graphic);
+        this.graphicView.setFitWidth(100);
+        this.graphicView.setFitHeight(100);
     }
 
     public AbstractTile(String id, Infrastructure[] scheme) throws FileNotFoundException {
@@ -27,6 +29,8 @@ public abstract class AbstractTile {
         this.scheme = scheme;
         this.graphic = new Image(new FileInputStream("src/main/resources/Tiles/Tile"+id+".png"));
         this.graphicView = new ImageView(this.graphic);
+        this.graphicView.setFitWidth(100);
+        this.graphicView.setFitHeight(100);
     }
 
     public Infrastructure[] getScheme() { return this.scheme; }
