@@ -43,8 +43,6 @@ public class App extends Application {
         mapGridPane.add(stackPane, i, j);
     }
 
-    public void nothing() {}
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         Map map = new Map();

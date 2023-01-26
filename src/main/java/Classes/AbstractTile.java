@@ -1,5 +1,6 @@
 package Classes;
 
+import Enums.Color;
 import Enums.Direction;
 import Enums.Infrastructure;
 import javafx.scene.image.Image;
@@ -7,11 +8,13 @@ import javafx.scene.image.ImageView;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 public abstract class AbstractTile {
     protected String id;
     protected Direction direction = Direction.TOP;
     protected Infrastructure[] scheme;
+    protected HashMap<Infrastructure, Color> pawns = new HashMap<>();
     protected Image graphic;
     protected ImageView graphicView;
 
@@ -40,6 +43,14 @@ public abstract class AbstractTile {
     public String getId() { return this.id; }
 
     public Direction getDirection() { return this.direction; }
+
+    public void placePawn(Infrastructure infrastructure, Color color) {
+        pawns.put(infrastructure, color);
+    }
+
+    public Color checkForPawn(Infrastructure infrastructure) {
+        return pawns.get(infrastructure);
+    }
 
     public String toString() {
         String result = "";

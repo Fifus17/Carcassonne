@@ -132,10 +132,16 @@ public class Map {
     public Vector2D getSize() { return this.size; }
 
     public AbstractTile getRandomTile() {
-        int rnd = new Random().nextInt(tileSet.size());
-        AbstractTile tile = tileSet.get(rnd);
-        tileSet.remove(rnd);
-        return tile;
+        if (tileSet.size() > 0) {
+            int rnd = new Random().nextInt(tileSet.size());
+            AbstractTile tile = tileSet.get(rnd);
+            tileSet.remove(rnd);
+            return tile;
+        }
+        else {
+            System.out.println("Koniec płytek");
+            return null;
+        }
     }
 
     public void placeTile(AbstractTile tile, Vector2D position) {
@@ -184,7 +190,7 @@ public class Map {
             }
         }
         // check for the roads
-        points += roadCheck(i, j);
+        points += newRoadCheck(i, j);
         return points;
     }
 
@@ -197,119 +203,134 @@ public class Map {
         return false;
     }
 
-    private int roadCheck(int i, int j) {
-        //tile with village
-        if (mapInfrastructureGrid[3*i+1][3*j+1]==(Infrastructure.V)) {
-            int points = 0;
-            int tmp = 0;
-            tmp = checkNextRoadNode(3*i+1, 3*j, Direction.BOT, 1);
-            if (tmp > 0) {
-                points += tmp;
-                System.out.println("Road completed");
-            }
-            tmp = checkNextRoadNode(3*i, 3*j+1, Direction.RIGHT, 1);
-            if (tmp > 0) {
-                points += tmp;
-                System.out.println("Road completed");
-            }
-            tmp = checkNextRoadNode(3*i+2, 3*j+1, Direction.LEFT, 1);
-            if (tmp > 0) {
-                points += tmp;
-                System.out.println("Road completed");
-            }
-            tmp = checkNextRoadNode(3*i+1, 3*j+2, Direction.TOP, 1);
-            if (tmp > 0) {
-                points += tmp;
-                System.out.println("Road completed");
-            }
-            return points;
+    private int roadRecursiveCheck(int i, int j, int d, int x, int y, Direction direction) {
+        // check if we did a loop
+        if (i==x && j==y) { return d-1; }
+        // check if there's and endpoint on the tile
+        if      (mapGrid[i][j].getScheme()[4]==Infrastructure.V || //later we need to check for the new village roads
+                mapGrid[i][j].getScheme()[4]==Infrastructure.G ||
+                mapGrid[i][j].getScheme()[4]==Infrastructure.M)
+        { return d; }
+        // else, find where the road is going and then check if next tile is a null, if it is then return 0, else return f(new tile)
+        if (direction != Direction.TOP && mapGrid[i][j].getScheme()[1]==Infrastructure.R)  {
+            if (mapGrid[i][j-1]==null) return 0;
+            else return roadRecursiveCheck(i, j-1, d+1, x, y, Direction.BOT);
         }
-        //tile without village
-        else {
-            int a=0;
-            // finding first road on the tile
-            while (mapInfrastructureGrid[3*i+a%3][3*j+(a/3)]!=Infrastructure.R) {
-                if(a < 8) a+=1;
-                else {
-                    a = 100;
-                    break;
-                }
-            }
-            if (a!=100) {
-                int c = 3*j+(a/3);
-                System.out.println(3*i+a%3 + " " + c + " znaleziona pierwsza droga");
-                int points = 1;
-                int ends = 0;
-                int tmp = checkNextRoadNode(3*i+a%3, 3*j+(a/3)-1, Direction.BOT, 0);
-                if(tmp > 0) {
-                    points += tmp;
-                    ends += 1;
-                    System.out.println("Road completed");
-                }
-                tmp = checkNextRoadNode(3*i+a%3-1, 3*j+(a/3), Direction.RIGHT, 0);
-                if(tmp > 0) {
-                    points += tmp;
-                    ends += 1;
-                    System.out.println("Road completed");
-                }
-                tmp = checkNextRoadNode(3*i+a%3+1, 3*j+(a/3), Direction.LEFT, 0);
-                if (tmp > 0) {
-                    points += tmp;
-                    ends += 1;
-                    System.out.println("Road completed");
-                }
-                tmp = checkNextRoadNode(3*i+a%3, 3*j+(a/3)+1, Direction.TOP, 0);
-                if (tmp > 0) {
-                    points += tmp;
-                    ends += 1;
-                    System.out.println("Road completed");
-                }
-                if (ends == 2) {
-                    return points/3 + points%3;
-                }
-            }
-            else return 0;
+        else if (direction != Direction.LEFT && mapGrid[i][j].getScheme()[3]==Infrastructure.R) {
+            if (mapGrid[i-1][j]==null) return 0;
+            else return roadRecursiveCheck(i-1, j, d+1, x, y, Direction.RIGHT);
         }
+        else if (direction != Direction.RIGHT && mapGrid[i][j].getScheme()[5]==Infrastructure.R) {
+            if (mapGrid[i+1][j]==null) return 0;
+            else return roadRecursiveCheck(i+1, j, d+1, x, y, Direction.LEFT);
+        }
+        else if (direction != Direction.BOT && mapGrid[i][j].getScheme()[7]==Infrastructure.R) {
+            if (mapGrid[i][j+1]==null) return 0;
+            else return roadRecursiveCheck(i, j+1, d+1, x, y, Direction.TOP);
+        }
+        System.out.println("bagno");
         return 0;
     }
 
-    private int checkNextRoadNode(int i, int j, Direction direction, int points) { // i and j in mapInfrastructureGrid
-        System.out.println(i + " " + j + " " + direction + " " + points);
-        if(direction!=Direction.LEFT && mapInfrastructureGrid[i-1][j] != null) {
-                switch (mapInfrastructureGrid[i - 1][j]) {
-                    case R: return checkNextRoadNode(i - 1, j, Direction.RIGHT, points + 1);
-                    case V: return points;
-                    case G: return points;
-                    case M: return points;
-                    default:
-                        break;
+    private int newRoadCheck(int i, int j) {
+        boolean[] roads = {false, false, false, false};
+        int roadsCount = 0;
+        int closed = 0;
+        int points = 1;
+
+        // finding where the roads are going and how many are there
+        if (mapGrid[i][j].getScheme()[1]==Infrastructure.R)
+        {
+            roads[0] = true;
+            roadsCount += 1;
+        }
+        if (mapGrid[i][j].getScheme()[3]==Infrastructure.R) {
+            roads[1] = true;
+            roadsCount += 1;
+        }
+        if (mapGrid[i][j].getScheme()[5]==Infrastructure.R) {
+            roads[2] = true;
+            roadsCount += 1;
+        }
+        if (mapGrid[i][j].getScheme()[7]==Infrastructure.R) {
+            roads[3] = true;
+            roadsCount += 1;
+        }
+
+        // No road on tile
+        if (roadsCount == 0) { return 0; }
+
+        // checking the roads
+        if (roadsCount < 3) {
+            if (roads[0] && mapGrid[i][j-1]!=null) {
+            int tmp = roadRecursiveCheck(i, j-1, 1, i, j, Direction.BOT);
+            if (tmp > 0) {
+                points += tmp;
+                closed += 1;
+            }
+            }
+            if (roads[1] && mapGrid[i-1][j]!=null) {
+                int tmp = roadRecursiveCheck(i-1, j, 1, i, j, Direction.RIGHT);
+                if (tmp > 0) {
+                    points += tmp;
+                    closed += 1;
                 }
             }
-        if(direction!= Direction.TOP && mapInfrastructureGrid[i][j-1] != null) {
-            switch (mapInfrastructureGrid[i][j-1]) {
-                case R: return checkNextRoadNode(i, j-1, Direction.BOT, points+1);
-                case V: return points;
-                case G: return points;
-                case M: return points;
-                default: break;
+            if (roads[2] && mapGrid[i+1][j]!=null) {
+                int tmp = roadRecursiveCheck(i+1, j, 1, i, j, Direction.LEFT);
+                if (tmp > 0) {
+                    points += tmp;
+                    closed += 1;
+                }
+            }
+            if (roads[3] && mapGrid[i][j+1]!=null) {
+                int tmp = roadRecursiveCheck(i, j+1, 1, i, j, Direction.TOP);
+                if (tmp > 0) {
+                    points += tmp;
+                    closed += 1;
+                }
             }
         }
-        if(direction!= Direction.RIGHT && mapInfrastructureGrid[i+1][j] != null) {
-            switch (mapInfrastructureGrid[i+1][j]) {
-                case R: return checkNextRoadNode(i+1, j, Direction.LEFT, points+1);
-                case V: return points;
-                case G: return points;
-                case M: return points;
-                default: break;
-            }
+        if (roadsCount == 1 && closed == 1) {
+            System.out.println("Droga jednostronna zamknięta!");
+            return points;
         }
-        if(direction!= Direction.BOT && mapInfrastructureGrid[i][j+1] != null) {
-            switch (mapInfrastructureGrid[i][j+1]) {
-                case R: return checkNextRoadNode(i, j+1, Direction.TOP, points+1);
-                case V: return points;
-                case G: return points;
-                case M: return points;
-                default: break;
+        if (roadsCount == 2 && closed == 2) {
+            System.out.println("Droga dwustronna zamknięta");
+            return points;
+        }
+        if (roadsCount == 3) {
+            if (roads[0] && mapGrid[i][j-1]!=null) {
+                int tmp = roadRecursiveCheck(i, j-1, 1, i, j, Direction.BOT);
+                if (tmp > 0) {
+                    System.out.println("Górna droga zamknięta");
+                    points += tmp;
+                    closed += 1;
+                }
+            }
+            if (roads[1] && mapGrid[i-1][j]!=null) {
+                int tmp = roadRecursiveCheck(i-1, j, 1, i, j, Direction.RIGHT);
+                if (tmp > 0) {
+                    System.out.println("Lewa droga zamknięta");
+                    points += tmp;
+                    closed += 1;
+                }
+            }
+            if (roads[2] && mapGrid[i+1][j]!=null) {
+                int tmp = roadRecursiveCheck(i+1, j, 1, i, j, Direction.LEFT);
+                if (tmp > 0) {
+                    System.out.println("Prawa droga zamknięta");
+                    points += tmp;
+                    closed += 1;
+                }
+            }
+            if (roads[3] && mapGrid[i][j+1]!=null) {
+                int tmp = roadRecursiveCheck(i, j+1, 1, i, j, Direction.TOP);
+                if (tmp > 0) {
+                    System.out.println("Dolna droga zamknięta");
+                    points += tmp;
+                    closed += 1;
+                }
             }
         }
         return 0;
