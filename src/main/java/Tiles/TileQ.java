@@ -11,7 +11,7 @@ public class TileQ extends AbstractTile {
         super(
                 "Q",
                 new Infrastructure[]{
-                        Infrastructure.C, Infrastructure.S, Infrastructure.C,
+                        Infrastructure.C, Infrastructure.C, Infrastructure.S,
                         Infrastructure.C, Infrastructure.C, Infrastructure.C,
                         Infrastructure.C, Infrastructure.P, Infrastructure.C
                 }

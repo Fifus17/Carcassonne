@@ -172,6 +172,7 @@ public class Map {
             case R -> inf2.equals(Infrastructure.R) || inf2.equals(Infrastructure.G) || inf2.equals(Infrastructure.R1) || inf2.equals(Infrastructure.R2);
             case P -> inf2.equals(Infrastructure.P) || inf2.equals(Infrastructure.CB);
             case C -> inf2.equals(Infrastructure.C) || inf2.equals(Infrastructure.S);
+            case S -> inf2.equals(Infrastructure.C) || inf2.equals(Infrastructure.S);
             default -> false;
         };
     }
