@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="898.0" prefWidth="778.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainPage">
+   <children>
+      <ImageView fitHeight="989.0" fitWidth="779.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../materials/CarcassonneBackground.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="newGame" layoutX="285.0" layoutY="411.0" mnemonicParsing="false" onAction="#startNewGameView" prefHeight="64.0" prefWidth="209.0" text="New Game" />
+      <Button fx:id="instructions" layoutX="285.0" layoutY="505.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="209.0" text="Instructions" />
+      <Button fx:id="history" layoutX="285.0" layoutY="599.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="209.0" text="History" />
+      <Button fx:id="credits" layoutX="285.0" layoutY="693.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="209.0" text="Credits" />
+      <Button fx:id="exit" layoutX="285.0" layoutY="787.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="209.0" text="Exit" />
+   </children>
+</AnchorPane>

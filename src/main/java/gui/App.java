@@ -6,6 +6,8 @@ import Classes.Player;
 import Classes.Vector2D;
 import Tiles.*;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.input.KeyCode;
@@ -34,6 +36,22 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        // Loading Main Page fxml files and controllers
+        FXMLLoader mainPageLoader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
+        Parent mainPage = mainPageLoader.load();
+        Scene mainPageScene = new Scene(mainPage);
+        MainPage mainPageController = (MainPage) mainPageLoader.getController();
+
+        FXMLLoader newGamePageLoader = new FXMLLoader(getClass().getResource("NewGamePage.fxml"));
+        Parent newGamePage = newGamePageLoader.load();
+        Scene newGamePageScene = new Scene(newGamePage);
+        NewGamePage newGamePageController = (NewGamePage) newGamePageLoader.getController();
+
+        // Setting up the scenes between controllers
+        mainPageController.setNewGameScene(newGamePageScene);
+        newGamePageController.setMainPageScene(mainPageScene);
+
         // Creating new map
         Map map = new Map();
 
@@ -41,8 +59,11 @@ public class App extends Application {
         initialize(map);
 
         // Setting up a Stage
-        primaryStage.setScene(new Scene(mapGridPane));
+        primaryStage.setScene(mainPageScene);
+        primaryStage.setHeight(989);
         primaryStage.show();
+        System.out.println(mainPageScene.getHeight());
+        System.out.println(mainPageScene.getWidth());
     }
 
     public void initialize(Map map) throws FileNotFoundException {
@@ -109,8 +130,8 @@ public class App extends Application {
         // Making the map draggable
         draggableMaker.makeDraggable(mapGridPane);
 
-        // Centering the map
-        mapGridPane.setLayoutX(-1000);
-        mapGridPane.setLayoutY(-1000);
+        // Moving the map to show the first Tile
+        mapGridPane.setLayoutX(-830);
+        mapGridPane.setLayoutY(-1150);
     }
 }

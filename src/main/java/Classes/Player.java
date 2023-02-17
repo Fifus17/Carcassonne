@@ -1,16 +1,22 @@
 package Classes;
 
 import Enums.Color;
+import Enums.Sex;
+import javafx.scene.image.ImageView;
 
 public class Player {
     private Color color;
     private String name;
     private int points = 0;
     private int numberOfPawns = 7;
+    private Sex sex;
+    private ImageView image;
 
-    public Player(Color color, String name) {
+    public Player(Color color, String name, Sex sex, ImageView imageView) {
         this.color = color;
         this.name = name;
+        this.sex = sex;
+        this.image = imageView;
     }
 
     public boolean placePawn() {
