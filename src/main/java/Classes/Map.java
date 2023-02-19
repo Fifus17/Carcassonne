@@ -229,7 +229,6 @@ public class Map {
             if (mapGrid[i][j+1]==null) return 0;
             else return roadRecursiveCheck(i, j+1, d+1, x, y, Direction.TOP);
         }
-        System.out.println("bagno");
         return 0;
     }
 

@@ -162,6 +162,14 @@
          </font>
       </RadioButton>
       <Button fx:id="startNewGame" layoutX="291.0" layoutY="864.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="150.0" text="Start new game" />
-      <Button fx:id="goBack" layoutX="28.0" layoutY="900.0" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="50.0" />
+      <Button fx:id="goBack" layoutX="28.0" layoutY="900.0" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="50.0" >
+         <graphic>
+            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../materials/back-arrow-2.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

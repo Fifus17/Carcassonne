@@ -3,8 +3,6 @@ package gui;
 import Classes.Player;
 import Enums.Color;
 import Enums.Sex;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -21,107 +19,24 @@ import java.util.ArrayList;
 public class NewGamePage {
 
     @FXML
-    private RadioButton BlackKing;
-
-    @FXML
-    private TextField BlackPlayerName;
-
-    @FXML
     private ImageView BlackPlayerPortrait;
-
-    @FXML
-    private ToggleGroup BlackPlayerToggleGroup;
-
-    @FXML
-    private RadioButton BlackQueen;
-
-    @FXML
-    private RadioButton BlueKing;
-
-    @FXML
-    private TextField BluePlayerName;
 
     @FXML
     private ImageView BluePlayerPortrait;
 
     @FXML
-    private ToggleGroup BluePlayerToggleGroup;
-
-    @FXML
-    private RadioButton BlueQueen;
-
-    @FXML
-    private RadioButton GreenKing;
-
-    @FXML
-    private TextField GreenPlayerName;
-
-    @FXML
     private ImageView GreenPlayerPortrait;
-
-    @FXML
-    private ToggleGroup GreenPlayerToggleGroup;
-
-    @FXML
-    private RadioButton GreenQueen;
-
-    @FXML
-    private RadioButton PinkKing;
-
-    @FXML
-    private TextField PinkPlayerName;
 
     @FXML
     private ImageView PinkPlayerPortrait;
 
     @FXML
-    private ToggleGroup PinkPlayerToggleGroup;
-
-    @FXML
-    private RadioButton PinkQueen;
-
-    @FXML
-    private RadioButton RedKing;
-
-    @FXML
-    private TextField RedPlayerName;
-
-    @FXML
     private ImageView RedPlayerPortrait;
-
-    @FXML
-    private ToggleGroup RedPlayerToggleGroup;
-
-    @FXML
-    private RadioButton RedQueen;
-
-    @FXML
-    private RadioButton YellowKing;
-
-    @FXML
-    private TextField YellowPlayerName;
 
     @FXML
     private ImageView YellowPlayerPortrait;
 
-    @FXML
-    private ToggleGroup YellowPlayerToggleGroup;
-
-    @FXML
-    private RadioButton YellowQueen;
-
-    @FXML
-    private Button goBack;
-
-    @FXML
-    private Button startNewGame;
-
     private Scene mainPageScene;
-
-    private RadioButton[] kingButtons = { BlueKing, YellowKing, GreenKing, RedKing, PinkKing, BlackKing };
-    private Color[] colors = { Color.BLUE, Color.YELLOW, Color.GREEN, Color.RED, Color.PINK, Color.BLACK };
-    private ImageView[] images = { BluePlayerPortrait, YellowPlayerPortrait, GreenPlayerPortrait, RedPlayerPortrait, PinkPlayerPortrait, BlackPlayerPortrait };
-    private TextField[] names = { BluePlayerName, YellowPlayerName, GreenPlayerName, RedPlayerName, PinkPlayerName, BlackPlayerName };
 
     // array with images
     Image[] graphics =  {
@@ -139,28 +54,7 @@ public class NewGamePage {
             new Image(new FileInputStream("src/main/resources/materials/BlackPlayer/queen.png"))
     };
 
-    public NewGamePage() throws FileNotFoundException {
-//        goBack.setGraphic(new ImageView(new Image(new FileInputStream("src/main/resources/materials/back-arrow-2.png"))));
-    }
-
-    private void StartGame() {
-        // Creating the players list
-        ArrayList<Player> players = new ArrayList<Player>();
-
-        Sex sex;
-        // For each textfields, if they're not empty then a player is created
-        for (int i = 0; i < 6; i++) {
-            if (names[i].getText() != null) {
-                if (kingButtons[i].isSelected()) sex = Sex.King;
-                else sex = Sex.Queen;
-                players.add(new Player(colors[i], names[i].getText(), sex, images[i]));
-            }
-        }
-
-
-        // running the app with the players ArrayList
-
-    }
+    public NewGamePage() throws FileNotFoundException { }
 
     public void changeBlueKing() { BluePlayerPortrait.setImage(this.graphics[0]); }
 

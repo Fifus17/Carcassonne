@@ -26,11 +26,11 @@ public class Game {
     private GridPane mapGridPane = new GridPane();
     private Hyperlink[][] hyperlinks = new Hyperlink[31][31];
     private StackPane[][] stackPanes = new StackPane[31][31];
-    private boolean[][] ifPlaced = new boolean[31][31];
 
     DraggableMaker draggableMaker = new DraggableMaker();
 
     public Game(Player[] players) throws FileNotFoundException {
+//        this.players = players;
 
         // Creating new map
         Map map = new Map();
