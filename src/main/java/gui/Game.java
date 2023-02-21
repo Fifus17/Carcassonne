@@ -1,12 +1,13 @@
 package gui;
 
-import Classes.AbstractTile;
-import Classes.Map;
-import Classes.Player;
-import Classes.Vector2D;
+import Classes.*;
+import Enums.Color;
+import Enums.Infrastructure;
+import Enums.Subject;
 import Tiles.TileD;
 import javafx.application.Application;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.input.KeyCode;
@@ -21,6 +22,7 @@ public class Game {
 
     private Scene gameScene;
     private Player[] players;
+    private Pawn[] pawns;
     private AbstractTile currentTile;
     private int turn = 0;
     private GridPane mapGridPane = new GridPane();
@@ -30,7 +32,7 @@ public class Game {
     DraggableMaker draggableMaker = new DraggableMaker();
 
     public Game(Player[] players) throws FileNotFoundException {
-//        this.players = players;
+        this.players = players;
 
         // Creating new map
         Map map = new Map();
@@ -101,8 +103,13 @@ public class Game {
             else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) currentTile.turnLeft();
         });
 
+
+        Pawn testPawn = new Pawn(Color.PINK, Subject.Knight, new Vector2D(0, 0), Infrastructure.C);
+
         // Adding the starting Tile D
-        mapGridPane.add(new StackPane(new TileD(1).getImageView()), 15, 15);
+        StackPane testPane = new StackPane(new TileD(1).getImageView(), testPawn.getGraphic());
+        testPane.setAlignment(Pos.TOP_CENTER);
+        mapGridPane.add(testPane, 15, 15);
         map.placeTile(new TileD(1), new Vector2D(15, 15));
 
         // Making the map draggable
@@ -111,6 +118,10 @@ public class Game {
         // Moving the map to show the first Tile
         mapGridPane.setLayoutX(-830);
         mapGridPane.setLayoutY(-1150);
+
+//        Pawn testPawn = new Pawn(Color.PINK, Subject.Priest, new Vector2D(0, 0), Infrastructure.C);
+
+//        mapGridPane.add(testPawn.getGraphic(), 13, 13);
     }
 
 }

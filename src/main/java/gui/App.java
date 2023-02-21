@@ -61,6 +61,8 @@ public class App extends Application {
 
         // Adding new Game method to the newGame Button
         Button newGameButton = (Button) newGamePageScene.lookup("#startNewGame");
+
+
         TextField[] names = new TextField[]{
                 (TextField) newGamePageScene.lookup("#BluePlayerName"),
                 (TextField) newGamePageScene.lookup("#YellowPlayerName"),
@@ -70,14 +72,14 @@ public class App extends Application {
                 (TextField) newGamePageScene.lookup("#BlackPlayerName")
         };
 
-        RadioButton[] kingButtons = new RadioButton[]{
-                (RadioButton) newGamePageScene.lookup("#BlueKing"),
-                (RadioButton) newGamePageScene.lookup("#YellowKing"),
-                (RadioButton) newGamePageScene.lookup("#GreenKing"),
-                (RadioButton) newGamePageScene.lookup("#RedKing"),
-                (RadioButton) newGamePageScene.lookup("#PinkKing"),
-                (RadioButton) newGamePageScene.lookup("#BlackKing")
-        };
+//        RadioButton[] kingButtons = new RadioButton[]{
+//                (RadioButton) newGamePageScene.lookup("#BlueKing"),
+//                (RadioButton) newGamePageScene.lookup("#YellowKing"),
+//                (RadioButton) newGamePageScene.lookup("#GreenKing"),
+//                (RadioButton) newGamePageScene.lookup("#RedKing"),
+//                (RadioButton) newGamePageScene.lookup("#PinkKing"),
+//                (RadioButton) newGamePageScene.lookup("#BlackKing")
+//        };
 
         ImageView[] images = new ImageView[]{
                 (ImageView) newGamePageScene.lookup("#BluePlayerPortrait"),
@@ -88,20 +90,15 @@ public class App extends Application {
                 (ImageView) newGamePageScene.lookup("#BlackPlayerPortrait")
         };
 
-        Color[] colors = { Color.BLUE, Color.YELLOW, Color.GREEN, Color.RED, Color.PINK, Color.BLACK };
+        Color[] colors = {Color.BLUE, Color.YELLOW, Color.GREEN, Color.RED, Color.PINK, Color.BLACK};
 
         newGameButton.setOnAction(event -> {
             // Creating the players list
             ArrayList<Player> players = new ArrayList<Player>();
 
-            Sex sex;
             // For each textfields, if they're not empty then a player is created
             for (int i = 0; i < 6; i++) {
-                if (names[i].getText() != "") {
-                    if (kingButtons[i].isSelected()) sex = Sex.King;
-                    else sex = Sex.Queen;
-                    players.add(new Player(colors[i], names[i].getText(), sex, images[i]));
-                }
+                if (names[i].getText() != "") players.add(new Player(colors[i], names[i].getText(), images[i]));
             }
 
             // running the app with the players ArrayList
@@ -116,16 +113,9 @@ public class App extends Application {
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
-            }
-            else System.out.println("Not enough players");
+            } else System.out.println("Not enough players");
         });
 
-
-        // Creating new map
-        Map map = new Map();
-
-        // Initializing gridpane and running the engine
-        initialize(map);
 
         // Setting up a Stage
         primaryStage.setScene(mainPageScene);
@@ -135,72 +125,4 @@ public class App extends Application {
         System.out.println(mainPageScene.getWidth());
     }
 
-    public void initialize(Map map) throws FileNotFoundException {
-
-        // Getting first Tile
-        this.currentTile = map.getRandomTile();
-
-        // Setting up the grid in the Grid Pane
-        for (int i=0; i<31; i++) {
-            mapGridPane.getColumnConstraints().add(new ColumnConstraints(100));
-            mapGridPane.getRowConstraints().add(new RowConstraints(100));
-        }
-
-        // Populating the grid with the StackPanes initially with corresponding hyperlinks
-        for (int i = 0; i < 31; i++) {
-            for (int j = 0; j < 31; j++) {
-
-                // Variables with the current cords
-                int finalI = i;
-                int finalJ = j;
-
-                // Setting up a hyperlink
-                hyperlinks[i][j] = new Hyperlink();
-                hyperlinks[i][j].setMinSize(100, 100);
-                hyperlinks[i][j].setMaxSize(100, 100);
-
-                // Adding hyperlinks to the corresponding StackPane
-                stackPanes[i][j] = new StackPane(hyperlinks[i][j]);
-                mapGridPane.add(stackPanes[i][j], i, j);
-
-                // Adding functions to the hyperlinks
-
-                // On entering the hyperlink program shows the current Tile ImageView in that place
-                hyperlinks[i][j].setOnMouseEntered( entered -> {
-                    mapGridPane.getChildren().remove(stackPanes[finalI][finalJ]);
-                    stackPanes[finalI][finalJ] = new StackPane(this.currentTile.getImageView(), hyperlinks[finalI][finalJ]);
-                    mapGridPane.add(stackPanes[finalI][finalJ], finalI, finalJ);
-                });
-
-                // On clicking the ImageView is being set and the hyperlink removed
-                hyperlinks[i][j].setOnMouseClicked( clicked -> {
-                    if (map.canBePlaced(currentTile, finalI, finalJ)) {
-                        stackPanes[finalI][finalJ].getChildren().clear();
-                        mapGridPane.getChildren().remove(stackPanes[finalI][finalJ]);
-                        mapGridPane.add(this.currentTile.getImageView(), finalI, finalJ);
-                        map.placeTile(currentTile, new Vector2D(finalI, finalJ));
-                        map.checkForPoints(finalI, finalJ);
-                        this.currentTile = map.getRandomTile();
-                    }
-                });
-            }
-        }
-
-        // Making rotating the tiles possible
-        mapGridPane.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) currentTile.turnRight();
-            else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) currentTile.turnLeft();
-        });
-
-        // Adding the starting Tile D
-        mapGridPane.add(new StackPane(new TileD(1).getImageView()), 15, 15);
-        map.placeTile(new TileD(1), new Vector2D(15, 15));
-
-        // Making the map draggable
-        draggableMaker.makeDraggable(mapGridPane);
-
-        // Moving the map to show the first Tile
-        mapGridPane.setLayoutX(-830);
-        mapGridPane.setLayoutY(-1150);
-    }
 }

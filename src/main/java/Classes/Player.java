@@ -9,13 +9,13 @@ public class Player {
     private String name;
     private int points = 0;
     private int numberOfPawns = 7;
-    private Sex sex;
+//    private Sex sex;
     private ImageView image;
 
-    public Player(Color color, String name, Sex sex, ImageView imageView) {
+    public Player(Color color, String name, ImageView imageView) {
         this.color = color;
         this.name = name;
-        this.sex = sex;
+//        this.sex = sex;
         this.image = imageView;
     }
 
