@@ -35,7 +35,6 @@ public class App extends Application {
     private Hyperlink[][] hyperlinks = new Hyperlink[31][31];
     private StackPane[][] stackPanes = new StackPane[31][31];
 
-    DraggableMaker draggableMaker = new DraggableMaker();
 
     public App() throws FileNotFoundException {
     }
@@ -72,14 +71,14 @@ public class App extends Application {
                 (TextField) newGamePageScene.lookup("#BlackPlayerName")
         };
 
-//        RadioButton[] kingButtons = new RadioButton[]{
-//                (RadioButton) newGamePageScene.lookup("#BlueKing"),
-//                (RadioButton) newGamePageScene.lookup("#YellowKing"),
-//                (RadioButton) newGamePageScene.lookup("#GreenKing"),
-//                (RadioButton) newGamePageScene.lookup("#RedKing"),
-//                (RadioButton) newGamePageScene.lookup("#PinkKing"),
-//                (RadioButton) newGamePageScene.lookup("#BlackKing")
-//        };
+        RadioButton[] kingButtons = new RadioButton[]{
+                (RadioButton) newGamePageScene.lookup("#BlueKing"),
+                (RadioButton) newGamePageScene.lookup("#YellowKing"),
+                (RadioButton) newGamePageScene.lookup("#GreenKing"),
+                (RadioButton) newGamePageScene.lookup("#RedKing"),
+                (RadioButton) newGamePageScene.lookup("#PinkKing"),
+                (RadioButton) newGamePageScene.lookup("#BlackKing")
+        };
 
         ImageView[] images = new ImageView[]{
                 (ImageView) newGamePageScene.lookup("#BluePlayerPortrait"),
@@ -95,10 +94,13 @@ public class App extends Application {
         newGameButton.setOnAction(event -> {
             // Creating the players list
             ArrayList<Player> players = new ArrayList<Player>();
+            Sex sex;
 
             // For each textfields, if they're not empty then a player is created
             for (int i = 0; i < 6; i++) {
-                if (names[i].getText() != "") players.add(new Player(colors[i], names[i].getText(), images[i]));
+                if (kingButtons[i].isSelected()) sex = Sex.King;
+                else sex = Sex.Queen;
+                if (names[i].getText() != "") players.add(new Player(colors[i], names[i].getText(), sex, images[i]));
             }
 
             // running the app with the players ArrayList

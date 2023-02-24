@@ -2,6 +2,7 @@ package Classes;
 
 import Enums.Color;
 import Enums.Infrastructure;
+import Enums.Sex;
 import Enums.Subject;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
@@ -16,23 +17,33 @@ public class Pawn {
     Color color;
     Image image;
     ImageView imageView;
+    Sex sex;
     Infrastructure placedOn;
     Vector2D position;
     StackPane backgroundPane;
     Subject type;
 
-    public Pawn(Color color, Subject type,Vector2D position, Infrastructure infrastructure) throws FileNotFoundException {
+    public Pawn(Color color, Subject type, Sex sex, Vector2D position, Infrastructure infrastructure) throws FileNotFoundException {
         this.placedOn = infrastructure;
         this.position = position;
         this.color = color;
         this.type = type;
+        this.sex = sex;
 
-        // using image that corresponds to the type of Pawn
-        switch (type) {
-            case Knight -> image = new Image(new FileInputStream("src/main/resources/materials/knight.png"));
-            case Robber -> image = new Image(new FileInputStream("src/main/resources/materials/robber.png"));
-            case Priest -> image = new Image(new FileInputStream("src/main/resources/materials/priest.png"));
+        // using image that corresponds to the type and sex of Pawn
+        switch (sex) {
+            case King: switch (type) {
+                    case Knight -> image = new Image(new FileInputStream("src/main/resources/materials/knight.png"));
+                    case Robber -> image = new Image(new FileInputStream("src/main/resources/materials/robber.png"));
+                    case Priest -> image = new Image(new FileInputStream("src/main/resources/materials/priest.png"));
+                }
+            case Queen: switch (type) {
+                case Knight -> image = new Image(new FileInputStream("src/main/resources/materials/valkyrie.png"));
+                case Robber -> image = new Image(new FileInputStream("src/main/resources/materials/villager.png"));
+                case Priest -> image = new Image(new FileInputStream("src/main/resources/materials/nun.png"));
+            }
         }
+
 
         // Creating all graphic nodes
         imageView = new ImageView(image);

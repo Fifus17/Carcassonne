@@ -3,6 +3,7 @@ package gui;
 import Classes.*;
 import Enums.Color;
 import Enums.Infrastructure;
+import Enums.Sex;
 import Enums.Subject;
 import Tiles.TileD;
 import javafx.application.Application;
@@ -11,10 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 import java.io.FileNotFoundException;
 
@@ -39,7 +37,8 @@ public class Game {
 
         // Initializing gridpane and running the engine
         initialize(map);
-        gameScene = new Scene(mapGridPane);
+        AnchorPane anchorPane = new AnchorPane(mapGridPane);
+        gameScene = new Scene(anchorPane);
     }
 
     public Scene getGameScene() {
@@ -104,7 +103,7 @@ public class Game {
         });
 
 
-        Pawn testPawn = new Pawn(Color.PINK, Subject.Knight, new Vector2D(0, 0), Infrastructure.C);
+        Pawn testPawn = new Pawn(Color.PINK, Subject.Knight, Sex.Queen, new Vector2D(0, 0), Infrastructure.C);
 
         // Adding the starting Tile D
         StackPane testPane = new StackPane(new TileD(1).getImageView(), testPawn.getGraphic());
