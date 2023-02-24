@@ -100,6 +100,7 @@ public class App extends Application {
             for (int i = 0; i < 6; i++) {
                 if (kingButtons[i].isSelected()) sex = Sex.King;
                 else sex = Sex.Queen;
+                if (names[i].getText() == "Zosia") sex = Sex.Zosia;
                 if (names[i].getText() != "") players.add(new Player(colors[i], names[i].getText(), sex, images[i]));
             }
 

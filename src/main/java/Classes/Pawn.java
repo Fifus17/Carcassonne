@@ -38,12 +38,16 @@ public class Pawn {
                     case Priest -> image = new Image(new FileInputStream("src/main/resources/materials/priest.png"));
                 }
             case Queen: switch (type) {
+                case Knight -> image = new Image(new FileInputStream("src/main/resources/materials/knight-female.png"));
+                case Robber -> image = new Image(new FileInputStream("src/main/resources/materials/villager.png"));
+                case Priest -> image = new Image(new FileInputStream("src/main/resources/materials/nun.png"));
+            }
+            case Zosia:switch (type) {
                 case Knight -> image = new Image(new FileInputStream("src/main/resources/materials/valkyrie.png"));
                 case Robber -> image = new Image(new FileInputStream("src/main/resources/materials/villager.png"));
                 case Priest -> image = new Image(new FileInputStream("src/main/resources/materials/nun.png"));
             }
         }
-
 
         // Creating all graphic nodes
         imageView = new ImageView(image);

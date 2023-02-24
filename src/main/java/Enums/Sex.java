@@ -2,5 +2,6 @@ package Enums;
 
 public enum Sex {
     King,
-    Queen
+    Queen,
+    Zosia
 }
