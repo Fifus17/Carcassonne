@@ -197,6 +197,9 @@ public class Game {
                         // changing the tileLeft GUI
                         this.tilesLeftLabel.setText(Integer.toString(map.tilesLeft()));
 
+                        // testing
+                        System.out.println(currentTile.getAllTypesOfInfrastructure().length);
+
                         // getting new random Tile
                         this.currentTile = map.getRandomTile();
                         while (!map.checkIfCanBePlacedSomewhere(currentTile)) currentTile = map.changeTile(currentTile);

@@ -119,8 +119,6 @@ public class App extends Application {
                     tilesLeftStackPane.setLayoutX(25);
                     tilesLeftStackPane.setLayoutY(primaryStage.getHeight() - 25);
                     primaryStage.setFullScreen(true);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

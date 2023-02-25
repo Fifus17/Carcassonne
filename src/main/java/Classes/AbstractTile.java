@@ -8,13 +8,13 @@ import javafx.scene.image.ImageView;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class AbstractTile {
     protected String id;
     protected Direction direction = Direction.TOP;
     protected Infrastructure[] scheme;
-    protected HashMap<Infrastructure, Color> pawns = new HashMap<>();
     protected Image graphic;
     protected ImageView graphicView;
 
@@ -43,14 +43,6 @@ public abstract class AbstractTile {
     public String getId() { return this.id; }
 
     public Direction getDirection() { return this.direction; }
-
-    public void placePawn(Infrastructure infrastructure, Color color) {
-        pawns.put(infrastructure, color);
-    }
-
-    public Color checkForPawn(Infrastructure infrastructure) {
-        return pawns.get(infrastructure);
-    }
 
     public String toString() {
         String result = "";
@@ -158,6 +150,20 @@ public abstract class AbstractTile {
         this.scheme[7] = this.scheme[3];
         this.scheme[3] = tmp1;
         this.graphicView.setRotate(this.graphicView.getRotate() - 90);
+    }
+
+    public Infrastructure[] getAllTypesOfInfrastructure() {
+        HashMap<Infrastructure, Infrastructure> hashMap = new HashMap<Infrastructure, Infrastructure>();
+
+        for (Infrastructure infrastructure: scheme) {
+            if (infrastructure == Infrastructure.C || infrastructure == Infrastructure.R || infrastructure == Infrastructure.M) {
+                hashMap.put(infrastructure, infrastructure);
+            }
+        }
+        Infrastructure[] infrastructures = new Infrastructure[hashMap.size()];
+        infrastructures = hashMap.keySet().toArray(infrastructures);
+
+        return infrastructures;
     }
 
 }

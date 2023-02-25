@@ -135,8 +135,8 @@ public class Map {
         if (tileSet.size() > 0) {
             int rnd = new Random().nextInt(tileSet.size());
             AbstractTile tile = tileSet.get(rnd);
-            tileSet.remove(rnd);
             System.out.println("Tiles left: " + tileSet.size());
+            tileSet.remove(rnd);
             return tile;
         }
         else {
