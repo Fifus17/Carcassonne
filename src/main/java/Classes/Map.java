@@ -136,10 +136,11 @@ public class Map {
             int rnd = new Random().nextInt(tileSet.size());
             AbstractTile tile = tileSet.get(rnd);
             tileSet.remove(rnd);
+            System.out.println("Tiles left: " + tileSet.size());
             return tile;
         }
         else {
-            System.out.println("Koniec płytek");
+            System.out.println("End of tiles");
             return null;
         }
     }
@@ -208,10 +209,11 @@ public class Map {
         // check if we did a loop
         if (i==x && j==y) { return d-1; }
         // check if there's and endpoint on the tile
-        if      (mapGrid[i][j].getScheme()[4]==Infrastructure.V || //later we need to check for the new village roads
+        if      (mapGrid[i][j].getScheme()[4]==Infrastructure.V || // later we need to check for the new village roads
                 mapGrid[i][j].getScheme()[4]==Infrastructure.G ||
                 mapGrid[i][j].getScheme()[4]==Infrastructure.M)
         { return d; }
+
         // else, find where the road is going and then check if next tile is a null, if it is then return 0, else return f(new tile)
         if (direction != Direction.TOP && mapGrid[i][j].getScheme()[1]==Infrastructure.R)  {
             if (mapGrid[i][j-1]==null) return 0;
@@ -292,18 +294,18 @@ public class Map {
             }
         }
         if (roadsCount == 1 && closed == 1) {
-            System.out.println("Droga jednostronna zamknięta!");
+            System.out.println("One way road closed!");
             return points;
         }
         if (roadsCount == 2 && closed == 2) {
-            System.out.println("Droga dwustronna zamknięta");
+            System.out.println("Two way road closed!");
             return points;
         }
         if (roadsCount == 3) {
             if (roads[0] && mapGrid[i][j-1]!=null) {
                 int tmp = roadRecursiveCheck(i, j-1, 1, i, j, Direction.BOT);
                 if (tmp > 0) {
-                    System.out.println("Górna droga zamknięta");
+                    System.out.println("Upper road closed!");
                     points += tmp;
                     closed += 1;
                 }
@@ -311,7 +313,7 @@ public class Map {
             if (roads[1] && mapGrid[i-1][j]!=null) {
                 int tmp = roadRecursiveCheck(i-1, j, 1, i, j, Direction.RIGHT);
                 if (tmp > 0) {
-                    System.out.println("Lewa droga zamknięta");
+                    System.out.println("Left road closed!");
                     points += tmp;
                     closed += 1;
                 }
@@ -319,7 +321,7 @@ public class Map {
             if (roads[2] && mapGrid[i+1][j]!=null) {
                 int tmp = roadRecursiveCheck(i+1, j, 1, i, j, Direction.LEFT);
                 if (tmp > 0) {
-                    System.out.println("Prawa droga zamknięta");
+                    System.out.println("Right road closed!");
                     points += tmp;
                     closed += 1;
                 }
@@ -327,7 +329,7 @@ public class Map {
             if (roads[3] && mapGrid[i][j+1]!=null) {
                 int tmp = roadRecursiveCheck(i, j+1, 1, i, j, Direction.TOP);
                 if (tmp > 0) {
-                    System.out.println("Dolna droga zamknięta");
+                    System.out.println("Lower road closed");
                     points += tmp;
                     closed += 1;
                 }

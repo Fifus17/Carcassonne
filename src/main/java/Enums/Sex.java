@@ -3,5 +3,5 @@ package Enums;
 public enum Sex {
     King,
     Queen,
-    Zosia
+    Zosia // special case for my purposes
 }

@@ -12,17 +12,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -100,8 +100,8 @@ public class App extends Application {
             for (int i = 0; i < 6; i++) {
                 if (kingButtons[i].isSelected()) sex = Sex.King;
                 else sex = Sex.Queen;
-                if (names[i].getText() == "Zosia") sex = Sex.Zosia;
-                if (names[i].getText() != "") players.add(new Player(colors[i], names[i].getText(), sex, images[i]));
+                if (names[i].getText() == "Zosia") sex = Sex.Zosia; // special case just for my purposes, feel free to change that
+                if (names[i].getText() != "") players.add(new Player(colors[i], names[i].getText(), sex, images[i].getImage()));
             }
 
             // running the app with the players ArrayList
@@ -111,9 +111,14 @@ public class App extends Application {
                 playersToPass = players.toArray(playersToPass);
                 try {
                     Game game = new Game(playersToPass);
+                    Parent currentPlayerGUI = game.getCurrentPlayerGUI();
                     primaryStage.setScene(game.getGameScene());
+                    currentPlayerGUI.setLayoutX(primaryStage.getWidth() - 300 - 25);
+                    currentPlayerGUI.setLayoutY(25);
                     primaryStage.setFullScreen(true);
                 } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             } else System.out.println("Not enough players");
