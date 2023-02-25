@@ -145,6 +145,15 @@ public class Map {
         }
     }
 
+    public AbstractTile changeTile(AbstractTile tileToChange) {
+        int rnd = new Random().nextInt(tileSet.size());
+        AbstractTile tile = tileSet.get(rnd);
+        tileSet.remove(rnd);
+        tileSet.add(tileToChange);
+        System.out.println("Tile changed");
+        return tile;
+    }
+
     public void placeTile(AbstractTile tile, Vector2D position) {
         this.mapGrid[position.x][position.y] = tile;
         this.mapInfrastructureGrid[3*position.x][3* position.y] = tile.scheme[0];
@@ -336,6 +345,24 @@ public class Map {
             }
         }
         return 0;
+    }
+
+    // I am too lazy to optimize this, but you can hold somewhere the boundary of the current map and just check its surroundings
+    public boolean checkIfCanBePlacedSomewhere(AbstractTile tile) {
+        for (int i=1; i < mapGrid.length-1; i++) {
+            for (int j=1; j < mapGrid.length-1; j++) {
+                if (mapGrid[i][j] == null) {
+                    if (canBePlaced(tile, i, j)) return true;
+                    tile.turnRight();
+                    if (canBePlaced(tile, i, j)) return true;
+                    tile.turnRight();
+                    if (canBePlaced(tile, i, j)) return true;
+                    tile.turnRight();
+                    if (canBePlaced(tile, i, j)) return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

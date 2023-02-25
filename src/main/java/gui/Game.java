@@ -181,6 +181,7 @@ public class Game {
 
                         // getting new random Tile
                         this.currentTile = map.getRandomTile();
+                        while (!map.checkIfCanBePlacedSomewhere(currentTile)) currentTile = map.changeTile(currentTile);
                         this.currentTile.getImageView().setFitWidth(96);
                         this.currentTile.getImageView().setFitHeight(96);
                     }
