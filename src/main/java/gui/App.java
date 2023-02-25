@@ -115,6 +115,9 @@ public class App extends Application {
                     primaryStage.setScene(game.getGameScene());
                     currentPlayerGUI.setLayoutX(primaryStage.getWidth() - 300 - 25);
                     currentPlayerGUI.setLayoutY(25);
+                    StackPane tilesLeftStackPane = game.getTilesLeft();
+                    tilesLeftStackPane.setLayoutX(25);
+                    tilesLeftStackPane.setLayoutY(primaryStage.getHeight() - 25);
                     primaryStage.setFullScreen(true);
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);

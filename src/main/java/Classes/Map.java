@@ -365,4 +365,6 @@ public class Map {
         return false;
     }
 
+    public int tilesLeft() { return tileSet.size(); }
+
 }

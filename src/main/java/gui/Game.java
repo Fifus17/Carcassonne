@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 
 import java.awt.*;
 import java.io.FileInputStream;
@@ -47,6 +48,8 @@ public class Game {
     private Label currentPlayerPawns;
     private Pane currentPlayerColor;
 
+    private Label tilesLeftLabel;
+    private StackPane tilesLeftStackPane;
 
     DraggableMaker draggableMaker = new DraggableMaker();
 
@@ -56,7 +59,7 @@ public class Game {
         // Creating UI
 
         // Creating menu Button
-        ImageView menuButtonImageView =new ImageView(new Image(new FileInputStream("src/main/resources/materials/menu.png")));
+        ImageView menuButtonImageView = new ImageView(new Image(new FileInputStream("src/main/resources/materials/menu.png")));
         menuButtonImageView.setFitHeight(40);
         menuButtonImageView.setFitWidth(40);
         Button menuButton = new Button("", menuButtonImageView);
@@ -64,6 +67,16 @@ public class Game {
         menuButton.setLayoutY(20);
         menuButton.setMinSize(50, 50);
         menuButton.setMaxSize(50, 50);
+
+        // Creating the TilesLeft indicator
+        Image tileLeftImage = new Image(new FileInputStream("src/main/resources/materials/logoTile.jpeg"));
+        ImageView tilesLeftImageView = new ImageView(tileLeftImage);
+        tilesLeftImageView.setFitHeight(50);
+        tilesLeftImageView.setFitWidth(50);
+        this.tilesLeftLabel = new Label("");
+        tilesLeftLabel.setFont(new Font(25));
+        tilesLeftLabel.setTextFill(javafx.scene.paint.Color.color(1, 1, 1));
+        this.tilesLeftStackPane = new StackPane(tilesLeftImageView, tilesLeftLabel);
 
         // Current Player
         FXMLLoader currentPlayerLoader = new FXMLLoader(getClass().getResource("CurrentPlayer.fxml"));
@@ -75,7 +88,7 @@ public class Game {
 
         // Initializing the Scene and running the engine
         initialize(map);
-        AnchorPane anchorPane = new AnchorPane(mapGridPane, menuButton, currentPlayer);
+        AnchorPane anchorPane = new AnchorPane(mapGridPane, menuButton, currentPlayer, tilesLeftStackPane);
         gameScene = new Scene(anchorPane);
 
         // currentPlayerGUI nodes
@@ -100,6 +113,8 @@ public class Game {
             case PINK -> "-fx-background-color: pink; -fx-border-radius: 40; -fx-border-color: rgb(255, 215, 0); -fx-border-width: 5px; -fx-background-radius: 40;";
             case BLACK -> "-fx-background-color: black; -fx-border-radius: 40; -fx-border-color: rgb(255, 215, 0); -fx-border-width: 5px; -fx-background-radius: 40;";
         });
+
+        tilesLeftLabel.setText(Integer.toString(map.tilesLeft()+1));
     }
 
     public Scene getGameScene() {
@@ -179,6 +194,9 @@ public class Game {
                             case BLACK -> "-fx-background-color: black; -fx-border-radius: 40; -fx-border-color: rgb(255, 215, 0); -fx-border-width: 5px; -fx-background-radius: 40;";
                         });
 
+                        // changing the tileLeft GUI
+                        this.tilesLeftLabel.setText(Integer.toString(map.tilesLeft()));
+
                         // getting new random Tile
                         this.currentTile = map.getRandomTile();
                         while (!map.checkIfCanBePlacedSomewhere(currentTile)) currentTile = map.changeTile(currentTile);
@@ -225,5 +243,8 @@ public class Game {
 
     // returning the currentPlayer GUI
     public Parent getCurrentPlayerGUI() { return this.currentPlayer; }
+
+    // returning the tilesLeft GUI
+    public StackPane getTilesLeft() { return this.tilesLeftStackPane; }
 
 }
