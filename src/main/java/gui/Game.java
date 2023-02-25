@@ -38,6 +38,9 @@ public class Game {
     private Parent currentPlayer;
     private CurrentPlayer currentPlayerController;
 
+    private int currentI;
+    private int currentJ;
+
     private Label currentPlayerNameGUI;
     private ImageView currentPlayerPortrait;
     private Label currentPlayerPoints;
@@ -107,6 +110,8 @@ public class Game {
 
         // Getting first Tile
         this.currentTile = map.getRandomTile();
+        this.currentTile.getImageView().setFitWidth(96);
+        this.currentTile.getImageView().setFitHeight(96);
 
         // Setting up the grid in the Grid Pane
         for (int i=0; i<31; i++) {
@@ -135,6 +140,10 @@ public class Game {
 
                 // On entering the hyperlink program shows the current Tile ImageView in that place
                 hyperlinks[i][j].setOnMouseEntered( entered -> {
+                    this.currentI = finalI;
+                    this.currentJ = finalJ;
+                    if (map.canBePlaced(currentTile, finalI, finalJ)) currentTile.getImageView().setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,255,0,0.6), 30, 0, 0, 0);");
+                    else currentTile.getImageView().setStyle("-fx-effect: dropshadow(three-pass-box, rgba(255,0,0,0.6), 30, 0, 0, 0);");
                     mapGridPane.getChildren().remove(stackPanes[finalI][finalJ]);
                     stackPanes[finalI][finalJ] = new StackPane(this.currentTile.getImageView(), hyperlinks[finalI][finalJ]);
                     mapGridPane.add(stackPanes[finalI][finalJ], finalI, finalJ);
@@ -144,6 +153,12 @@ public class Game {
                 hyperlinks[i][j].setOnMouseClicked( clicked -> {
                     if (map.canBePlaced(currentTile, finalI, finalJ)) {
                         turn++;
+
+                        // clearing effects
+                        this.currentTile.getImageView().setFitWidth(100);
+                        this.currentTile.getImageView().setFitHeight(100);
+                        this.currentTile.getImageView().setStyle("");
+
                         stackPanes[finalI][finalJ].getChildren().clear();
                         mapGridPane.getChildren().remove(stackPanes[finalI][finalJ]);
                         mapGridPane.add(this.currentTile.getImageView(), finalI, finalJ);
@@ -166,6 +181,8 @@ public class Game {
 
                         // getting new random Tile
                         this.currentTile = map.getRandomTile();
+                        this.currentTile.getImageView().setFitWidth(96);
+                        this.currentTile.getImageView().setFitHeight(96);
                     }
                 });
             }
@@ -173,8 +190,16 @@ public class Game {
 
         // Making rotating the tiles possible
         mapGridPane.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) currentTile.turnRight();
-            else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) currentTile.turnLeft();
+            if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
+                currentTile.turnRight();
+                if (map.canBePlaced(currentTile, currentI, currentJ)) currentTile.getImageView().setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,255,0,0.6), 30, 0, 0, 0);");
+                else currentTile.getImageView().setStyle("-fx-effect: dropshadow(three-pass-box, rgba(255,0,0,0.6), 30, 0, 0, 0);");
+            }
+            else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
+                currentTile.turnLeft();
+                if (map.canBePlaced(currentTile, currentI, currentJ)) currentTile.getImageView().setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,255,0,0.6), 30, 0, 0, 0);");
+                else currentTile.getImageView().setStyle("-fx-effect: dropshadow(three-pass-box, rgba(255,0,0,0.6), 30, 0, 0, 0);");
+            }
         });
 
 
